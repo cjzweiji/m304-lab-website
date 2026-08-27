@@ -21,6 +21,22 @@ function setInviteMode() {
   onboarding.hidden = false;
 }
 
+function isImageFile(file) {
+  return file && ["image/jpeg", "image/png", "image/webp"].includes(file.type);
+}
+
+async function uploadAvatar(userId, file) {
+  if (!file) return null;
+  if (!isImageFile(file)) throw new Error("头像仅支持 JPG、PNG 或 WebP 格式");
+  if (file.size > 2 * 1024 * 1024) throw new Error("头像大小不能超过 2 MB");
+  const extension = file.type.split("/")[1].replace("jpeg", "jpg");
+  const path = `${userId}/avatar-${Date.now()}.${extension}`;
+  const { error: uploadError } = await authClient.storage.from("avatars").upload(path, file, { upsert: true, contentType: file.type, cacheControl: "3600" });
+  if (uploadError) throw uploadError;
+  const { data } = authClient.storage.from("avatars").getPublicUrl(path);
+  return data.publicUrl;
+}
+
 async function initializeLogin() {
   lucide.createIcons();
   if (!authClient) {
@@ -48,13 +64,21 @@ document.querySelector("#activate-form").addEventListener("submit", async (event
   event.preventDefault();
   if (!authClient) return;
   const name = document.querySelector("#activate-name").value.trim();
+  const gender = document.querySelector("#activate-gender").value;
+  const avatarFile = document.querySelector("#activate-avatar").files[0];
   const password = document.querySelector("#activate-password").value;
   const confirmed = document.querySelector("#activate-confirm-password").value;
   if (password !== confirmed) return setMessage("两次输入的密码不一致", "error");
   setMessage("正在保存账户...");
   const { error: updateError } = await authClient.auth.updateUser({ password, data: { display_name: name } });
   if (updateError) return setMessage(updateError.message, "error");
-  const { error: profileError } = await authClient.rpc("set_my_display_name", { p_display_name: name });
+  let avatarUrl = null;
+  try {
+    avatarUrl = await uploadAvatar((await authClient.auth.getUser()).data.user.id, avatarFile);
+  } catch (error) {
+    return setMessage(error.message || "头像上传失败", "error");
+  }
+  const { error: profileError } = await authClient.rpc("update_my_profile", { p_display_name: name, p_gender: gender, p_avatar_url: avatarUrl });
   if (profileError) return setMessage(profileError.message, "error");
   await authClient.rpc("complete_my_invitation");
   window.location.replace("index.html");

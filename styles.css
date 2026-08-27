@@ -40,8 +40,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .site-nav a { position: relative; padding: 25px 0; font-size: 14px; white-space: nowrap; }
 .site-nav a::after { position: absolute; right: 0; bottom: 17px; left: 0; height: 2px; background: var(--cyan); content: ""; transform: scaleX(0); transform-origin: right; transition: transform 180ms ease; }
 .site-nav a:hover::after, .site-nav a:focus-visible::after { transform: scaleX(1); transform-origin: left; }
+.header-account { position: relative; display: flex; align-items: center; gap: 9px; }
 .header-login { border: 1px solid var(--ink); background: #fff; color: var(--ink); min-width: 96px; padding: 9px 12px; border-radius: 4px; font-size: 14px; font-weight: 700; }
 .header-login:hover { color: #fff; background: var(--ink); }
+.account-menu-trigger { min-height: 42px; display: inline-flex; align-items: center; gap: 8px; padding: 4px 9px 4px 5px; border: 1px solid var(--ink); border-radius: 4px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 800; }
+.account-menu-trigger:hover, .account-menu-trigger[aria-expanded="true"] { background: #edf3f5; }
+.account-menu-trigger > svg { width: 15px; height: 15px; color: var(--muted); }
+.account-avatar { width: 31px; height: 31px; display: grid; place-items: center; overflow: hidden; border-radius: 50%; background: #d8eef1; color: var(--navy); font-size: 12px; font-weight: 900; }
+.account-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.account-name { max-width: 112px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-menu { position: absolute; z-index: 25; top: calc(100% + 9px); right: 0; width: 150px; padding: 6px; border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); }
+.account-menu[hidden] { display: none; }
+.account-menu button, .account-menu a { width: 100%; display: flex; align-items: center; gap: 9px; padding: 9px 10px; border: 0; background: transparent; color: var(--ink); font-size: 13px; font-weight: 700; text-align: left; }
+.account-menu button:hover, .account-menu a:hover { background: #edf3f5; color: var(--blue); }
+.account-menu svg { width: 16px; height: 16px; color: var(--muted); }
 .nav-toggle { display: none; }
 .icon-button { width: 38px; height: 38px; display: inline-grid; place-items: center; border: 0; border-radius: 4px; background: transparent; color: var(--ink); }
 .icon-button:hover { background: #edf3f5; }
@@ -117,7 +129,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .leaderboard-entry:last-child { border-bottom: 0; }
 .leaderboard-position { color: var(--muted); font-size: 13px; font-weight: 900; text-align: center; }
 .leaderboard-entry:nth-child(1) .leaderboard-position { color: #b87908; }
-.leaderboard-person { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: #e5f0df; color: #466c36; font-size: 12px; font-weight: 900; }
+.leaderboard-person { width: 32px; height: 32px; display: grid; place-items: center; overflow: hidden; border-radius: 50%; background: #e5f0df; color: #466c36; font-size: 12px; font-weight: 900; }
 .leaderboard-name { overflow: hidden; color: var(--ink); font-size: 14px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
 .leaderboard-days { color: #466c36; font-size: 13px; font-weight: 800; }
 .leaderboard-empty { min-height: 146px; display: grid; place-items: center; margin: 0; color: var(--muted); font-size: 14px; text-align: center; }
@@ -173,6 +185,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .achievement-list span { color: var(--blue); font-size: 12px; font-weight: 800; }
 .achievement-list h3 { margin: 5px 0; font-size: 23px; }
 .achievement-list p { margin: 0; color: var(--muted); }
+
+.activity-section { background: #eef5f6; }
+.activity-preview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.activity-preview-card { display: flex; flex-direction: column; min-height: 245px; padding: 22px; border-top: 4px solid var(--blue); background: #fff; box-shadow: 0 7px 15px rgba(9,35,63,.04); }
+.activity-preview-teal { border-color: var(--teal); }
+.activity-preview-coral { border-color: var(--coral); }
+.activity-card-topline { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 12px; font-weight: 800; }
+.activity-status { display: inline-flex; align-items: center; padding: 3px 7px; font-size: 11px; font-weight: 800; }
+.activity-status.is-planned { background: #e9f4f7; color: var(--teal); }
+.activity-status.is-past { background: #edf3e4; color: #4d763b; }
+.activity-preview-card .activity-date { margin: 16px 0 5px; }
+.activity-preview-card h3 { margin: 0 0 8px; font-size: 20px; line-height: 1.35; }
+.activity-preview-card > p:not(.activity-date) { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.activity-preview-card .panel-link { margin-top: auto; padding-top: 17px; }
 
 .member-section { background: #0a385c; color: #fff; }
 .member-section .eyebrow { color: #8be2f0; }
@@ -230,7 +256,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .topic-list { border-top: 1px solid var(--line); }
 .topic-card { padding: 21px 0 18px; border-bottom: 1px solid var(--line); }
 .topic-card-top { display: flex; gap: 16px; align-items: flex-start; }
-.topic-avatar { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 50%; background: #e0edf0; color: var(--navy); font-size: 14px; font-weight: 900; }
+.topic-avatar { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; overflow: hidden; border-radius: 50%; background: #e0edf0; color: var(--navy); font-size: 14px; font-weight: 900; }
+.leaderboard-person img, .topic-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .topic-main { flex: 1; min-width: 0; }
 .topic-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; color: var(--muted); font-size: 12px; }
 .topic-meta .category-tag { padding: 2px 7px; background: #e9f4f7; color: var(--teal); font-weight: 800; }
@@ -272,6 +299,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .login-dialog { width: min(430px, calc(100% - 32px)); padding: 0; border: 0; background: transparent; }
 .login-dialog::backdrop { background: rgba(2, 18, 33, .6); }
+.profile-dialog { width: min(460px, calc(100% - 32px)); padding: 0; border: 0; background: transparent; }
+.profile-dialog::backdrop { background: rgba(2, 18, 33, .6); }
 .dialog-content { display: grid; gap: 17px; padding: 26px; background: #fff; box-shadow: var(--shadow); }
 .dialog-heading { display: flex; justify-content: space-between; gap: 16px; align-items: start; }
 .dialog-heading h2 { margin: 4px 0 0; font-size: 24px; }
@@ -279,6 +308,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .dialog-content input { min-height: 42px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 3px; outline: 0; font-weight: 400; }
 .dialog-content input:focus { border-color: var(--blue); }
 .dialog-submit { width: 100%; margin-top: 2px; }
+.profile-preview-row { display: flex; align-items: center; gap: 12px; padding: 10px 0 3px; border-bottom: 1px solid var(--line); }
+.profile-avatar-preview { width: 54px; height: 54px; display: grid; place-items: center; overflow: hidden; border-radius: 50%; background: #d8eef1; color: var(--navy); font-size: 22px; font-weight: 800; }
+.profile-avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+.profile-preview-row strong, .profile-preview-row span { display: block; }
+.profile-preview-row strong { color: var(--ink); }
+.profile-preview-row span { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.profile-message { min-height: 20px; margin: 0; color: var(--muted); font-size: 13px; }
+.profile-message.is-error { color: #b53e32; }
+.profile-message.is-success { color: #2a6f43; }
 .toast { position: fixed; z-index: 50; right: 20px; bottom: 20px; max-width: min(330px, calc(100% - 40px)); padding: 12px 15px; background: var(--dark); color: #fff; box-shadow: var(--shadow); font-size: 14px; opacity: 0; pointer-events: none; transform: translateY(14px); transition: opacity 180ms ease, transform 180ms ease; }
 .toast.is-visible { opacity: 1; transform: translateY(0); }
 
@@ -289,6 +327,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .hero-layout { grid-template-columns: 1fr .75fr; gap: 38px; }
   .two-column, .join-layout { gap: 54px; }
   .achievement-layout { gap: 30px; }
+  .activity-preview-grid { gap: 12px; }
   .forum-layout { gap: 24px; }
   .checkin-layout { gap: 34px; }
 }
@@ -300,7 +339,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .brand { min-width: 0; }
   .brand img { width: 38px; height: 38px; }
   .nav-toggle { display: inline-grid; order: 3; }
-  .header-login { margin-left: auto; min-width: 76px; padding: 8px 9px; font-size: 12px; }
+  .header-account { margin-left: auto; gap: 6px; }
+  .header-login { min-width: 76px; padding: 8px 9px; font-size: 12px; }
+  .account-menu-trigger { min-height: 38px; padding-right: 6px; }
+  .account-name { max-width: 74px; }
+  .account-menu { right: 0; }
   .site-nav { position: absolute; top: 64px; right: 0; left: 0; display: none; align-items: stretch; flex-direction: column; gap: 0; padding: 8px 16px 16px; border-bottom: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); }
   .site-nav.is-open { display: flex; }
   .site-nav a { padding: 12px 0; font-size: 14px; }
@@ -318,7 +361,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .two-column, .join-layout, .achievement-layout, .contact-layout, .checkin-layout { grid-template-columns: 1fr; display: grid; gap: 28px; }
   .section-heading { display: grid; align-items: start; gap: 16px; margin-bottom: 28px; }
   .section-heading > p { font-size: 14px; }
-  .direction-grid, .path-detail-grid, .member-grid { grid-template-columns: 1fr; }
+  .direction-grid, .path-detail-grid, .member-grid, .activity-preview-grid { grid-template-columns: 1fr; }
   .direction-panel { min-height: 368px; padding: 24px; }
   .pathway { grid-template-columns: 1fr; border-top-width: 2px; }
   .pathway li { min-height: 0; display: grid; grid-template-columns: 52px 96px 1fr; gap: 10px; align-items: center; padding: 15px; border-left: 1px solid var(--line); }

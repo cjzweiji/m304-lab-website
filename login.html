@@ -28,7 +28,16 @@
           </form>
           <div class="auth-onboarding" id="onboarding-form" hidden>
             <form class="auth-form" id="activate-form">
-              <label>显示名称<input id="activate-name" maxlength="24" required placeholder="在社区中显示的名称" /></label>
+              <label>用户名<input id="activate-name" maxlength="24" required placeholder="在社区中显示的名称" /></label>
+              <label>性别
+                <select id="activate-gender">
+                  <option value="prefer_not">不愿透露</option>
+                  <option value="female">女</option>
+                  <option value="male">男</option>
+                  <option value="non_binary">其他</option>
+                </select>
+              </label>
+              <label>头像（可选）<input id="activate-avatar" type="file" accept="image/png,image/jpeg,image/webp" /></label>
               <label>设置密码<input id="activate-password" type="password" minlength="8" autocomplete="new-password" required placeholder="至少 8 位" /></label>
               <label>确认密码<input id="activate-confirm-password" type="password" minlength="8" autocomplete="new-password" required placeholder="再次输入密码" /></label>
               <button class="button button-primary" type="submit">完成账户设置 <i data-lucide="check"></i></button>

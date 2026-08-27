@@ -29,6 +29,16 @@ const loginTriggers = document.querySelectorAll(".login-trigger");
 const composerTriggers = document.querySelectorAll(".composer-trigger");
 const channel = "BroadcastChannel" in window ? new BroadcastChannel("m304-forum") : null;
 const remoteClient = window.m304Supabase || null;
+const accountLoginLink = document.querySelector("#account-login-link");
+const accountMenuTrigger = document.querySelector("#account-menu-trigger");
+const accountMenu = document.querySelector("#account-menu");
+const accountName = document.querySelector("#account-name");
+const accountAvatar = document.querySelector("#account-avatar");
+const accountLogout = document.querySelector("#account-logout");
+const profileEditTrigger = document.querySelector("#profile-edit-trigger");
+const profileDialog = document.querySelector("#profile-dialog");
+const profileForm = document.querySelector("#profile-form");
+const profileMessage = document.querySelector("#profile-message");
 
 function cloneTopics(value) {
   return value.map((topic) => ({ ...topic, replies: [...topic.replies] }));
@@ -109,20 +119,21 @@ function formatRelativeTime(iso) {
 async function getRemoteProfiles(ids) {
   const uniqueIds = [...new Set(ids.filter(Boolean))];
   if (!uniqueIds.length) return new Map();
-  const { data, error } = await remoteClient.from("profiles").select("id, display_name").in("id", uniqueIds);
+  const { data, error } = await remoteClient.from("profiles").select("id, display_name, avatar_url").in("id", uniqueIds);
   if (error) { console.error("fetch profiles:", error.message); return new Map(); }
-  return new Map((data || []).map((profile) => [profile.id, profile.display_name]));
+  return new Map((data || []).map((profile) => [profile.id, profile]));
 }
 
 async function fetchRemoteStudySessions() {
   if (!remoteClient || !currentUser) return;
   const { data, error } = await remoteClient.from("study_sessions").select("id, user_id, started_at, ended_at").order("started_at", { ascending: true });
   if (error) { console.error("fetch study sessions:", error.message); return; }
-  const names = await getRemoteProfiles((data || []).map((session) => session.user_id));
+  const profiles = await getRemoteProfiles((data || []).map((session) => session.user_id));
   studySessions = (data || []).map((session) => ({
     id: session.id,
     userId: session.user_id,
-    name: names.get(session.user_id) || "成员",
+    name: profiles.get(session.user_id)?.display_name || "成员",
+    avatarUrl: profiles.get(session.user_id)?.avatar_url || "",
     startedAt: session.started_at,
     endedAt: session.ended_at
   }));
@@ -139,7 +150,7 @@ async function fetchRemoteTopics() {
   if (topicError) { console.error("fetch topics:", topicError.message); return; }
   const { data: replyRows, error: replyError } = await remoteClient.from("replies").select("topic_id, body");
   if (replyError) console.error("fetch replies:", replyError.message);
-  const names = await getRemoteProfiles((topicRows || []).map((topic) => topic.author_id));
+  const profiles = await getRemoteProfiles((topicRows || []).map((topic) => topic.author_id));
   const repliesByTopic = new Map();
   (replyRows || []).forEach((reply) => repliesByTopic.set(reply.topic_id, [...(repliesByTopic.get(reply.topic_id) || []), reply.body]));
   topics = (topicRows || []).map((topic) => ({
@@ -147,7 +158,8 @@ async function fetchRemoteTopics() {
     category: topic.category,
     title: topic.title,
     excerpt: topic.excerpt,
-    author: names.get(topic.author_id) || "成员",
+    author: profiles.get(topic.author_id)?.display_name || "成员",
+    avatarUrl: profiles.get(topic.author_id)?.avatar_url || "",
     role: topic.author_id === currentUser.id ? "我" : "社区成员",
     time: formatRelativeTime(topic.created_at),
     replies: repliesByTopic.get(topic.id) || []
@@ -160,13 +172,17 @@ async function resolveRemoteUser() {
   if (!remoteClient) return;
   const { data: { user } } = await remoteClient.auth.getUser();
   if (!user) { currentUser = null; updateUserInterface(); renderCheckin(); return; }
-  const { data: profile } = await remoteClient.from("profiles").select("display_name").eq("id", user.id).maybeSingle();
+  const { data: profile } = await remoteClient.from("profiles").select("display_name, gender, avatar_url, profile_completed_at").eq("id", user.id).maybeSingle();
   currentUser = {
     id: user.id,
     email: user.email,
-    name: profile?.display_name || user.user_metadata?.display_name || user.email.split("@")[0]
+    name: profile?.display_name || user.user_metadata?.display_name || user.email.split("@")[0],
+    gender: profile?.gender || "prefer_not",
+    avatarUrl: profile?.avatar_url || "",
+    profileCompleted: Boolean(profile?.profile_completed_at)
   };
   updateUserInterface();
+  if (!currentUser.profileCompleted) window.setTimeout(openProfileDialog, 250);
   await Promise.all([fetchRemoteStudySessions(), fetchRemoteTopics()]);
 }
 
@@ -236,7 +252,7 @@ function getWeeklyLeaders() {
   const weekDays = new Set(getWeekDayKeys());
   studySessions.forEach((session) => {
     if (weekDays.has(getDateKey(new Date(session.startedAt)))) {
-      const existing = leaders.get(session.userId) || { userId: session.userId, name: session.name, minutes: 0 };
+      const existing = leaders.get(session.userId) || { userId: session.userId, name: session.name, avatarUrl: session.avatarUrl || "", minutes: 0 };
       existing.minutes += getSessionMinutes(session);
       leaders.set(session.userId, existing);
     }
@@ -293,7 +309,7 @@ function renderCheckin() {
   leaderboard.innerHTML = leaders.length
     ? leaders.map((entry, index) => `<li class="leaderboard-entry">
         <span class="leaderboard-position">${index + 1}</span>
-        <span class="leaderboard-person">${escapeHtml(getInitial(entry.name))}</span>
+        <span class="leaderboard-person">${entry.avatarUrl ? `<img src="${escapeHtml(entry.avatarUrl)}" alt="" />` : escapeHtml(getInitial(entry.name))}</span>
         <span class="leaderboard-name">${escapeHtml(entry.name)}</span>
         <span class="leaderboard-days">${formatMinutes(entry.minutes)}</span>
       </li>`).join("")
@@ -332,9 +348,12 @@ function topicMarkup(topic) {
       </form>`
     : "";
 
+  const avatar = topic.avatarUrl
+    ? `<img src="${escapeHtml(topic.avatarUrl)}" alt="" />`
+    : escapeHtml(getInitial(topic.author));
   return `<article class="topic-card">
     <div class="topic-card-top">
-      <div class="topic-avatar" aria-hidden="true">${escapeHtml(getInitial(topic.author))}</div>
+      <div class="topic-avatar" aria-hidden="true">${avatar}</div>
       <div class="topic-main">
         <div class="topic-meta">
           <strong>${escapeHtml(topic.author)}</strong>
@@ -386,11 +405,58 @@ function updateUserInterface() {
     button.textContent = currentUser ? currentUser.name : "登录社区";
     button.classList.toggle("is-user", Boolean(currentUser));
   });
-  const accountLink = document.querySelector(".header-login");
-  if (remoteClient && accountLink && currentUser) {
-    accountLink.textContent = currentUser.name;
-    accountLink.href = "index.html#checkin";
+  if (accountLoginLink) accountLoginLink.hidden = Boolean(remoteClient && currentUser);
+  if (accountMenuTrigger) accountMenuTrigger.hidden = !(remoteClient && currentUser);
+  if (accountMenuTrigger && !currentUser) accountMenuTrigger.setAttribute("aria-expanded", "false");
+  if (accountName && currentUser) accountName.textContent = currentUser.name || "成员";
+  if (accountAvatar && currentUser) {
+    accountAvatar.innerHTML = currentUser.avatarUrl
+      ? `<img src="${escapeHtml(currentUser.avatarUrl)}" alt="" />`
+      : escapeHtml(getInitial(currentUser.name || "M"));
   }
+}
+
+function setProfileMessage(message, type = "") {
+  if (!profileMessage) return;
+  profileMessage.textContent = message;
+  profileMessage.className = `profile-message ${type ? `is-${type}` : ""}`;
+}
+
+function renderProfilePreview() {
+  if (!currentUser) return;
+  const avatar = document.querySelector("#profile-avatar-preview");
+  const name = document.querySelector("#profile-preview-name");
+  const email = document.querySelector("#profile-preview-email");
+  name.textContent = currentUser.name || "新成员";
+  email.textContent = currentUser.email || "成员邮箱";
+  avatar.innerHTML = currentUser.avatarUrl
+    ? `<img src="${escapeHtml(currentUser.avatarUrl)}" alt="" />`
+    : escapeHtml(getInitial(currentUser.name || "M"));
+}
+
+function openProfileDialog() {
+  if (!profileDialog || !currentUser || !remoteClient) return;
+  document.querySelector("#profile-name").value = currentUser.name || "";
+  document.querySelector("#profile-gender").value = currentUser.gender || "prefer_not";
+  document.querySelector("#profile-avatar").value = "";
+  setProfileMessage(currentUser.profileCompleted ? "" : "请先完善资料，再开始使用成员功能。");
+  renderProfilePreview();
+  if (!profileDialog.open) profileDialog.showModal();
+}
+
+function isImageFile(file) {
+  return file && ["image/jpeg", "image/png", "image/webp"].includes(file.type);
+}
+
+async function uploadAvatar(file) {
+  if (!file) return currentUser?.avatarUrl || null;
+  if (!isImageFile(file)) throw new Error("头像仅支持 JPG、PNG 或 WebP 格式");
+  if (file.size > 2 * 1024 * 1024) throw new Error("头像大小不能超过 2 MB");
+  const extension = file.type.split("/")[1].replace("jpeg", "jpg");
+  const path = `${currentUser.id}/avatar-${Date.now()}.${extension}`;
+  const { error } = await remoteClient.storage.from("avatars").upload(path, file, { upsert: true, contentType: file.type, cacheControl: "3600" });
+  if (error) throw error;
+  return remoteClient.storage.from("avatars").getPublicUrl(path).data.publicUrl;
 }
 
 function showToast(message) {
@@ -442,6 +508,65 @@ document.querySelector(".close-composer").addEventListener("click", () => {
 });
 
 document.querySelector(".close-dialog").addEventListener("click", () => loginDialog.close());
+document.querySelector(".close-profile").addEventListener("click", () => profileDialog.close());
+profileEditTrigger?.addEventListener("click", () => {
+  accountMenu.hidden = true;
+  accountMenuTrigger?.setAttribute("aria-expanded", "false");
+  openProfileDialog();
+});
+accountMenuTrigger?.addEventListener("click", () => {
+  const isOpen = accountMenu.hidden;
+  accountMenu.hidden = !isOpen;
+  accountMenuTrigger.setAttribute("aria-expanded", String(isOpen));
+});
+accountLogout?.addEventListener("click", async () => {
+  if (!remoteClient) return;
+  accountLogout.disabled = true;
+  const { error } = await remoteClient.auth.signOut();
+  accountLogout.disabled = false;
+  if (error) return showToast(error.message);
+  accountMenu.hidden = true;
+  showToast("已退出登录");
+});
+document.addEventListener("click", (event) => {
+  if (!accountMenu || accountMenu.hidden || event.target.closest(".header-account")) return;
+  accountMenu.hidden = true;
+  accountMenuTrigger?.setAttribute("aria-expanded", "false");
+});
+
+document.querySelector("#profile-avatar")?.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (!file || !isImageFile(file)) return;
+  const preview = document.querySelector("#profile-avatar-preview");
+  preview.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="" />`;
+});
+
+profileForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!remoteClient || !currentUser) return;
+  const name = document.querySelector("#profile-name").value.trim();
+  const gender = document.querySelector("#profile-gender").value;
+  const avatarFile = document.querySelector("#profile-avatar").files[0];
+  if (!name) return setProfileMessage("请输入用户名", "error");
+  const button = event.currentTarget.querySelector("button[type='submit']");
+  button.disabled = true;
+  setProfileMessage("正在保存资料...");
+  try {
+    const avatarUrl = await uploadAvatar(avatarFile);
+    const { data, error } = await remoteClient.rpc("update_my_profile", { p_display_name: name, p_gender: gender, p_avatar_url: avatarUrl });
+    if (error) throw error;
+    currentUser = { ...currentUser, name, gender, avatarUrl, profileCompleted: true };
+    updateUserInterface();
+    renderProfilePreview();
+    profileDialog.close();
+    showToast("个人资料已更新");
+    await Promise.all([fetchRemoteStudySessions(), fetchRemoteTopics()]);
+  } catch (error) {
+    setProfileMessage(error.message || "资料保存失败", "error");
+  } finally {
+    button.disabled = false;
+  }
+});
 
 document.querySelector("#login-form").addEventListener("submit", (event) => {
   event.preventDefault();
