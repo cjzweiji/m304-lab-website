@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>成员邀请 | M304 创新实验室</title>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body class="auth-body">
+    <header class="site-header auth-header"><div class="site-shell header-inner"><a class="brand" href="index.html"><img src="assets/m304-logo.jpg" alt="M304 创新实验室标识" /><span><strong>M304</strong><small>创新实验室</small></span></a><a class="header-login" href="index.html">返回首页</a></div></header>
+    <main class="admin-layout" id="admin-content" hidden>
+      <div class="admin-heading"><div><p class="eyebrow">MEMBER ADMINISTRATION</p><h1>成员邀请</h1></div><p>向指定邮箱发送实验室邀请。受邀者设置密码后才可进入成员功能；邀请码会在发送成功后显示。</p></div>
+      <div class="admin-grid">
+        <section class="admin-card"><h2>发送新邀请</h2><form class="auth-form" id="invite-form"><label>成员邮箱<input id="invite-email" type="email" required placeholder="member@example.com" /></label><label>成员角色<select id="invite-role"><option value="member">成员</option><option value="moderator">社区协管</option></select></label><button class="button button-primary" type="submit">发送邀请码 <i data-lucide="send"></i></button></form><div class="invite-result" id="invite-result" hidden></div></section>
+        <section class="admin-card"><h2>最近邀请</h2><ul class="invite-history" id="invite-history"></ul></section>
+      </div>
+    </main>
+    <main class="admin-denied" id="admin-denied"><p class="eyebrow">ADMIN ONLY</p><h1>正在验证权限</h1><p>仅管理员可以发送成员邀请。</p></main>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>

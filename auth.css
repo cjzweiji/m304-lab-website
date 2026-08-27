@@ -1,0 +1,55 @@
+.auth-body { min-height: 100vh; background: #eef3f5; }
+.auth-header { position: static; }
+.auth-shell { width: min(1040px, calc(100% - 40px)); min-height: calc(100vh - 72px); display: grid; grid-template-columns: .9fr 1.1fr; margin: 0 auto; }
+.auth-intro { display: flex; flex-direction: column; justify-content: space-between; padding: 54px 46px; background: #09395d; color: #fff; }
+.auth-intro .eyebrow { color: #84e0ef; }
+.auth-intro h1 { max-width: 420px; margin: 10px 0 16px; font-size: clamp(38px, 4vw, 57px); line-height: 1.08; }
+.auth-intro p:not(.eyebrow) { max-width: 350px; margin: 0; color: #d3e4ed; font-size: 16px; }
+.auth-intro-footer { display: flex; gap: 9px; align-items: center; color: #95cbd9; font-size: 13px; }
+.auth-intro-footer svg { width: 18px; }
+.auth-panel { display: grid; align-content: center; padding: 48px; background: #fff; }
+.auth-panel-inner { width: min(100%, 370px); margin: 0 auto; }
+.auth-panel h2 { margin: 6px 0 8px; font-size: 31px; line-height: 1.2; }
+.auth-lede { margin: 0 0 27px; color: var(--muted); font-size: 14px; }
+.auth-form { display: grid; gap: 16px; }
+.auth-form label { display: grid; gap: 6px; color: var(--ink); font-size: 13px; font-weight: 800; }
+.auth-form input, .auth-form select { min-height: 45px; width: 100%; padding: 9px 11px; border: 1px solid #c8d5da; border-radius: 3px; outline: 0; color: var(--ink); background: #fff; font-weight: 400; }
+.auth-form input:focus, .auth-form select:focus { border-color: var(--blue); }
+.auth-form .button { width: 100%; margin-top: 4px; }
+.auth-message { min-height: 22px; margin: 14px 0 0; color: var(--muted); font-size: 13px; }
+.auth-message.is-error { color: #b53e32; }
+.auth-message.is-success { color: #2a6f43; }
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 24px 0 13px; color: var(--muted); font-size: 12px; }
+.auth-divider::before, .auth-divider::after { height: 1px; flex: 1; background: var(--line); content: ""; }
+.auth-text-button { padding: 0; border: 0; background: transparent; color: var(--navy); font-size: 13px; font-weight: 800; }
+.auth-text-button:hover { color: var(--blue); }
+.auth-onboarding { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+.auth-onboarding[hidden], .auth-form[hidden] { display: none; }
+.config-notice { margin: 18px 0 0; padding: 12px; border-left: 3px solid var(--coral); background: #fff2ef; color: #754138; font-size: 13px; }
+.admin-layout { width: min(1020px, calc(100% - 40px)); padding: 54px 0 72px; margin: 0 auto; }
+.admin-heading { display: flex; align-items: end; justify-content: space-between; gap: 25px; margin-bottom: 30px; }
+.admin-heading h1 { margin: 7px 0 0; font-size: 42px; line-height: 1.1; }
+.admin-heading p:not(.eyebrow) { max-width: 390px; margin: 0; color: var(--muted); }
+.admin-grid { display: grid; grid-template-columns: minmax(290px, .8fr) minmax(0, 1.2fr); gap: 20px; }
+.admin-card { padding: 27px; border-top: 4px solid var(--blue); background: #fff; box-shadow: 0 8px 24px rgba(9,35,63,.06); }
+.admin-card h2 { margin: 0 0 16px; font-size: 21px; }
+.invite-result { margin-top: 17px; padding: 12px; border: 1px solid #b9d4bf; background: #edf8ef; color: #275e35; font-size: 13px; }
+.invite-result[hidden] { display: none; }
+.invite-history { display: grid; gap: 0; padding: 0; margin: 0; list-style: none; border-top: 1px solid var(--line); }
+.invite-history li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.invite-history strong, .invite-history span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.invite-history strong { font-size: 14px; }
+.invite-history span { color: var(--muted); font-size: 12px; }
+.admin-denied { max-width: 560px; padding: 58px 0; margin: 0 auto; text-align: center; }
+
+@media (max-width: 760px) {
+  .auth-shell { width: 100%; min-height: calc(100vh - 64px); grid-template-columns: 1fr; }
+  .auth-intro { min-height: 250px; padding: 37px 28px; }
+  .auth-intro h1 { font-size: 38px; }
+  .auth-intro-footer { display: none; }
+  .auth-panel { padding: 36px 25px 46px; }
+  .admin-layout { width: min(100% - 32px, 1020px); padding-top: 38px; }
+  .admin-heading { display: grid; align-items: start; }
+  .admin-heading h1 { font-size: 34px; }
+  .admin-grid { grid-template-columns: 1fr; }
+}

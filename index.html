@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="M304 创新实验室：学习算法，完成软件项目，参加竞赛。"
+    />
+    <title>M304 创新实验室</title>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <header class="site-header">
+      <div class="site-shell header-inner">
+        <a class="brand" href="#home" aria-label="M304 创新实验室首页">
+          <img src="assets/m304-logo.jpg" alt="M304 创新实验室标识" />
+          <span>
+            <strong>M304</strong>
+            <small>创新实验室</small>
+          </span>
+        </a>
+
+        <button class="nav-toggle icon-button" type="button" aria-label="展开导航" title="展开导航">
+          <i data-lucide="menu"></i>
+        </button>
+
+        <nav class="site-nav" aria-label="主导航">
+          <a href="#about">关于 M304</a>
+          <a href="#directions">方向培养</a>
+          <a href="#checkin">学习打卡</a>
+          <a href="awards.html">成果档案</a>
+          <a href="#members">成员</a>
+          <a href="#join">加入我们</a>
+          <a href="#forum">讨论社区</a>
+        </nav>
+
+        <a class="header-login" href="login.html">邮箱登录</a>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="home">
+        <div class="site-shell hero-layout">
+          <div class="hero-copy">
+            <p class="eyebrow">M304 INNOVATION LAB</p>
+            <h1>算法 x 软件</h1>
+            <p class="hero-lede">
+              从一行代码开始，把想法做成作品；在练习、项目与竞赛中，和一群认真做事的人一起成长。
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#join">加入 M304 <i data-lucide="arrow-up-right"></i></a>
+              <a class="button button-quiet" href="#directions">探索培养方向</a>
+            </div>
+          </div>
+          <div class="hero-brand" aria-label="M304 开源、领航、传承、汇聚">
+            <img src="assets/m304-logo.jpg" alt="M304 标识" />
+            <div class="hero-brand-caption">
+              <span>开源</span>
+              <span>领航</span>
+              <span>传承</span>
+              <span>汇聚</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="stat-band" aria-label="实验室概览数据">
+        <div class="site-shell stat-grid">
+          <div><strong>2016</strong><span>实验室创立</span></div>
+          <div><strong>97 m²</strong><span>学习与实践空间</span></div>
+          <div><strong>24</strong><span>2026 蓝桥杯证书</span></div>
+          <div><strong>2</strong><span>核心培养方向</span></div>
+        </div>
+      </section>
+
+      <section class="section checkin-section" id="checkin">
+        <div class="site-shell checkin-layout">
+          <div class="checkin-main">
+            <p class="eyebrow">M304 STUDY PULSE</p>
+            <h2>学习打卡</h2>
+            <p class="checkin-lede">把每天的一点投入，变成可以看见的节奏。</p>
+            <div class="checkin-date-row">
+              <span id="checkin-date">今日</span>
+              <span class="streak-indicator"><i data-lucide="flame"></i>连续 <strong id="checkin-streak">0</strong> 天</span>
+            </div>
+            <div class="study-timer" aria-live="polite">
+              <div><span id="study-timer-state">尚未开始今日学习</span><strong id="study-timer">00:00:00</strong></div>
+              <span>今日累计 <b id="checkin-today">0 分钟</b></span>
+            </div>
+            <div class="checkin-stat-grid" aria-label="我的打卡统计">
+              <div><strong id="checkin-weekly">0 分钟</strong><span>本周学习</span></div>
+              <div><strong id="checkin-total">0 分钟</strong><span>累计时长</span></div>
+              <div><strong id="checkin-rank">--</strong><span>本周排名</span></div>
+            </div>
+            <button class="button checkin-button" id="checkin-button" type="button"><i data-lucide="play"></i><span>开始学习</span></button>
+          </div>
+
+          <aside class="leaderboard-panel" aria-labelledby="leaderboard-title">
+            <div class="leaderboard-heading">
+              <div>
+                <p class="panel-kicker">WEEKLY BOARD</p>
+                <h3 id="leaderboard-title">本周学习榜</h3>
+              </div>
+              <i data-lucide="medal"></i>
+            </div>
+            <ol class="leaderboard-list" id="leaderboard-list" aria-live="polite"></ol>
+            <div class="weekly-goal">
+              <div><span>本周个人目标</span><strong id="goal-label">0 / 10 小时</strong></div>
+              <div class="progress-track"><span id="goal-progress"></span></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-overview" id="about">
+        <div class="site-shell two-column">
+          <div class="section-intro">
+            <p class="eyebrow">ABOUT M304</p>
+            <h2>把学习放进真实的实践里</h2>
+          </div>
+          <div class="prose">
+            <p>
+              M304 创新实验室成立于 2016 年，是一个面向学生开放的算法与软件实践平台。我们围绕学习、研发与竞赛，提供从基础入门到成果展示的持续支持。
+            </p>
+            <p>
+              这里有固定的学习空间、教师指导与学长学姐帮扶，也有清晰的训练节奏。成员可以在独立思考和团队协作中，逐步建立解决问题与交付作品的能力。
+            </p>
+            <a class="text-link" href="#join">了解加入方式 <i data-lucide="arrow-right"></i></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section direction-section" id="directions">
+        <div class="site-shell">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">LEARNING PATHS</p>
+              <h2>两条路径，同一种成长</h2>
+            </div>
+            <p>选择你更愿意投入的方向，也可以在实践中找到自己的答案。</p>
+          </div>
+
+          <div class="direction-grid">
+            <article class="direction-panel algorithm-panel">
+              <div class="direction-number">01</div>
+              <div>
+                <p class="panel-kicker">ALGORITHM</p>
+                <h3>算法竞赛</h3>
+                <p>在读题、建模、编码与调试中训练问题分析能力，面向 ICPC、蓝桥杯等赛事。</p>
+              </div>
+              <ul class="feature-list">
+                <li>数据结构与算法思想</li>
+                <li>C++ / Java / Python 编程训练</li>
+                <li>OJ 练习、复盘与团队配合</li>
+              </ul>
+              <a class="panel-link" href="#algorithm-path">查看培养路径 <i data-lucide="arrow-up-right"></i></a>
+            </article>
+
+            <article class="direction-panel software-panel">
+              <div class="direction-number">02</div>
+              <div>
+                <p class="panel-kicker">SOFTWARE</p>
+                <h3>软件项目</h3>
+                <p>从需求理解到上线演示，走完一次完整开发流程，把创意做成可使用的产品。</p>
+              </div>
+              <ul class="feature-list">
+                <li>需求、设计、开发与测试</li>
+                <li>Git 协作、部署与文档</li>
+                <li>项目实践与成果展示</li>
+              </ul>
+              <a class="panel-link" href="#software-path">查看培养路径 <i data-lucide="arrow-up-right"></i></a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section pathway-section">
+        <div class="site-shell">
+          <div class="section-heading compact-heading">
+            <div>
+              <p class="eyebrow">FROM START TO SHOWCASE</p>
+              <h2>每一步都知道该练什么</h2>
+            </div>
+          </div>
+          <ol class="pathway" aria-label="学习成长路径">
+            <li><span>01</span><strong>入门</strong><p>任选一门语言，建立编程与工具基础。</p></li>
+            <li><span>02</span><strong>基础训练</strong><p>学习核心技术，形成稳定练习习惯。</p></li>
+            <li><span>03</span><strong>动手实践</strong><p>刷题或完成项目，在问题中持续改进。</p></li>
+            <li><span>04</span><strong>比赛协作</strong><p>和队友完成真实任务，接受成果检验。</p></li>
+            <li><span>05</span><strong>总结沉淀</strong><p>整理经验，让下一次做得更好。</p></li>
+          </ol>
+
+          <div class="path-detail-grid">
+            <article class="path-detail" id="algorithm-path">
+              <p class="panel-kicker">ALGORITHM PATH</p>
+              <h3>从会写程序，到会解决问题</h3>
+              <p>逐步掌握编程语言、算法思想、数据结构、开发工具与综合应用，在训练中建立可靠的解题过程。</p>
+              <div class="tag-row"><span>C++</span><span>Java</span><span>Python</span><span>ICPC</span><span>蓝桥杯</span></div>
+            </article>
+            <article class="path-detail" id="software-path">
+              <p class="panel-kicker">SOFTWARE PATH</p>
+              <h3>从学习技术，到完成一个项目</h3>
+              <p>学习技术工具和协作方式，完成从需求、设计、开发、测试到展示的完整项目循环。</p>
+              <div class="tag-row"><span>Web</span><span>Git</span><span>AI 工具</span><span>部署</span><span>项目管理</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section achievement-section" id="achievements">
+        <div class="site-shell">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">WHAT WE BUILT</p>
+              <h2>把努力留在看得见的成果里</h2>
+            </div>
+            <a class="text-link" href="awards.html">查看全部成果档案 <i data-lucide="arrow-right"></i></a>
+          </div>
+
+          <div class="achievement-layout">
+            <div class="achievement-highlight">
+              <p>2026 蓝桥杯</p>
+              <strong>24</strong>
+              <span>张证书</span>
+              <div class="highlight-rule"></div>
+              <small>全国总决赛 5 项 + 省赛 19 项<br />覆盖 C++、Java、Python 与网络安全</small>
+            </div>
+            <div class="achievement-list">
+              <article>
+                <span>全国总决赛</span>
+                <h3>5 位成员，三种编程语言</h3>
+                <p>C/C++ 2 项、Java 1 项、Python 2 项，均获全国总决赛三等奖。</p>
+              </article>
+              <article>
+                <span>项目实践</span>
+                <h3>从比赛命题走到真实项目</h3>
+                <p>服务外包创新创业大赛获奖，并开展 KG-RAG Agent 算法导学评测系统等项目实践。</p>
+              </article>
+              <article>
+                <span>继续深造</span>
+                <h3>让积累成为下一段路的底气</h3>
+                <p>成员升学至西北大学、济南大学、广西师范大学等高校相关院系。</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section member-section" id="members">
+        <div class="site-shell">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">PEOPLE OF M304</p>
+              <h2>老师引路，伙伴同行</h2>
+            </div>
+            <p>导师提供方向与专业支持，学长学姐把经验沉淀成可以接续的帮助。</p>
+          </div>
+          <div class="member-grid">
+            <article class="mentor-card">
+              <div class="avatar initials-avatar">杨</div>
+              <p class="member-role">指导教师</p>
+              <h3>杨玉珍</h3>
+              <p>博士、教授、硕士研究生导师。研究方向包括自然语言处理、多模态数据分析与网络舆情分析。</p>
+            </article>
+            <article class="mentor-card">
+              <div class="avatar initials-avatar teal-avatar">黄</div>
+              <p class="member-role">指导教师</p>
+              <h3>黄文庆</h3>
+              <p>讲师、硕士。研究方向包括网络技术与软件开发，长期指导学生参加程序设计与创新创业赛事。</p>
+            </article>
+            <article class="support-card">
+              <i data-lucide="messages-square"></i>
+              <h3>经验会被继续传下去</h3>
+              <p>从选题讨论、备赛安排到赛后复盘，新成员始终有人可以交流和提问。</p>
+              <a class="panel-link" href="#forum">进入讨论社区 <i data-lucide="arrow-up-right"></i></a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section join-section" id="join">
+        <div class="site-shell join-layout">
+          <div>
+            <p class="eyebrow">JOIN M304</p>
+            <h2>愿意投入，<br />就从这里开始。</h2>
+            <p class="join-intro">零基础不是问题。比起现在会多少，我们更看重兴趣、主动学习和长期坚持。</p>
+          </div>
+          <div class="join-content">
+            <div class="join-requirements">
+              <h3>我们期待这样的你</h3>
+              <ul class="check-list">
+                <li><i data-lucide="check"></i>对编程、算法或软件开发感兴趣</li>
+                <li><i data-lucide="check"></i>愿意稳定投入时间，长期练习</li>
+                <li><i data-lucide="check"></i>遇到问题愿意查资料、调试与总结</li>
+                <li><i data-lucide="check"></i>尊重队友，愿意沟通与承担任务</li>
+              </ul>
+            </div>
+            <div class="join-process">
+              <h3>加入流程</h3>
+              <ol>
+                <li><span>1</span>提交报名信息</li>
+                <li><span>2</span>交流面试</li>
+                <li><span>3</span>方向机试或任务</li>
+                <li><span>4</span>阶段学习与考核</li>
+              </ol>
+            </div>
+            <a class="button button-primary join-button" href="mailto:1405965296@qq.com?subject=M304%20%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%8A%A5%E5%90%8D%E5%92%A8%E8%AF%A2">获取报名信息 <i data-lucide="mail"></i></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section forum-section" id="forum">
+        <div class="site-shell">
+          <div class="section-heading forum-heading">
+            <div>
+              <p class="eyebrow">M304 COMMUNITY</p>
+              <h2>讨论社区</h2>
+            </div>
+            <div class="forum-heading-actions">
+              <label class="search-field">
+                <i data-lucide="search"></i>
+                <input id="forum-search" type="search" placeholder="搜索讨论" aria-label="搜索讨论" />
+              </label>
+              <button class="button button-primary composer-trigger" type="button">发布话题 <i data-lucide="square-pen"></i></button>
+            </div>
+          </div>
+
+          <div class="forum-layout">
+            <aside class="forum-sidebar" aria-label="社区分区">
+              <p class="sidebar-label">讨论分区</p>
+              <div class="category-list" role="list">
+                <button class="category-item is-active" type="button" data-category="all"><i data-lucide="layout-list"></i>全部讨论 <span>6</span></button>
+                <button class="category-item" type="button" data-category="algorithm"><i data-lucide="binary"></i>算法训练 <span>2</span></button>
+                <button class="category-item" type="button" data-category="software"><i data-lucide="code-2"></i>软件开发 <span>2</span></button>
+                <button class="category-item" type="button" data-category="competition"><i data-lucide="trophy"></i>竞赛交流 <span>1</span></button>
+                <button class="category-item" type="button" data-category="recruitment"><i data-lucide="megaphone"></i>纳新问答 <span>1</span></button>
+              </div>
+              <div class="sidebar-contact">
+                <i data-lucide="mail"></i>
+                <p>需要联系实验室？<a href="mailto:1405965296@qq.com">1405965296@qq.com</a></p>
+              </div>
+            </aside>
+
+            <div class="forum-feed">
+              <form class="new-topic-form" id="new-topic-form" hidden>
+                <div class="form-heading"><strong>发布新话题</strong><button class="close-composer icon-button" type="button" aria-label="关闭发布框" title="关闭发布框"><i data-lucide="x"></i></button></div>
+                <input id="topic-title" maxlength="80" required placeholder="输入一个清晰的话题标题" aria-label="话题标题" />
+                <div class="topic-form-row">
+                  <select id="topic-category" aria-label="话题分区">
+                    <option value="algorithm">算法训练</option>
+                    <option value="software">软件开发</option>
+                    <option value="competition">竞赛交流</option>
+                    <option value="recruitment">纳新问答</option>
+                  </select>
+                  <button class="button button-primary" type="submit">发布 <i data-lucide="send"></i></button>
+                </div>
+              </form>
+              <div class="feed-toolbar"><span id="feed-state">全部讨论</span><span id="post-count">6 个话题</span></div>
+              <div class="topic-list" id="topic-list" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact">
+        <div class="site-shell contact-layout">
+          <div>
+            <p class="eyebrow">CONTACT</p>
+            <h2>在 M304，<br />把下一次尝试开始。</h2>
+          </div>
+          <div class="contact-actions">
+            <a href="mailto:1405965296@qq.com"><i data-lucide="mail"></i><span>1405965296@qq.com</span></a>
+            <a href="#forum"><i data-lucide="messages-square"></i><span>进入讨论社区</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-shell footer-inner">
+        <p>M304 创新实验室</p>
+        <p>开源 · 领航 · 传承 · 汇聚</p>
+        <p>信息以实验室后续通知为准</p>
+      </div>
+    </footer>
+
+    <dialog class="login-dialog" id="login-dialog" aria-labelledby="login-title">
+      <form class="dialog-content" id="login-form" method="dialog">
+        <div class="dialog-heading">
+          <div><p class="eyebrow">M304 COMMUNITY</p><h2 id="login-title">登录讨论社区</h2></div>
+          <button class="close-dialog icon-button" type="button" aria-label="关闭登录窗口" title="关闭登录窗口"><i data-lucide="x"></i></button>
+        </div>
+        <label>昵称<input id="login-name" name="name" maxlength="20" required placeholder="例如：小林" /></label>
+        <label>邮箱<input id="login-email" name="email" type="email" required placeholder="name@example.com" /></label>
+        <button class="button button-primary dialog-submit" type="submit">进入社区 <i data-lucide="arrow-right"></i></button>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
