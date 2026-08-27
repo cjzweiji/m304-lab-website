@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="M304 创新实验室成员邮箱登录。" />
+    <title>邮箱登录 | M304 创新实验室</title>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body class="auth-body">
+    <header class="site-header auth-header"><div class="site-shell header-inner"><a class="brand" href="index.html"><img src="assets/m304-logo.jpg" alt="M304 创新实验室标识" /><span><strong>M304</strong><small>创新实验室</small></span></a><a class="header-login" href="index.html">返回首页</a></div></header>
+    <main class="auth-shell">
+      <section class="auth-intro">
+        <div><p class="eyebrow">M304 MEMBER ACCESS</p><h1>在这里，<br />继续你的学习。</h1><p>实验室成员通过受邀邮箱进入学习计时、讨论与协作空间。</p></div>
+        <div class="auth-intro-footer"><i data-lucide="shield-check"></i><span>仅限受邀请成员</span></div>
+      </section>
+      <section class="auth-panel">
+        <div class="auth-panel-inner">
+          <p class="eyebrow">EMAIL SIGN IN</p>
+          <h2 id="auth-title">邮箱登录</h2>
+          <p class="auth-lede" id="auth-lede">使用管理员发送邀请的邮箱和已设置的密码登录。</p>
+          <form class="auth-form" id="sign-in-form">
+            <label>邮箱<input id="sign-in-email" type="email" autocomplete="email" required placeholder="name@example.com" /></label>
+            <label>密码<input id="sign-in-password" type="password" autocomplete="current-password" required placeholder="输入密码" /></label>
+            <button class="button button-primary" type="submit">登录 <i data-lucide="arrow-right"></i></button>
+          </form>
+          <div class="auth-onboarding" id="onboarding-form" hidden>
+            <form class="auth-form" id="activate-form">
+              <label>显示名称<input id="activate-name" maxlength="24" required placeholder="在社区中显示的名称" /></label>
+              <label>设置密码<input id="activate-password" type="password" minlength="8" autocomplete="new-password" required placeholder="至少 8 位" /></label>
+              <label>确认密码<input id="activate-confirm-password" type="password" minlength="8" autocomplete="new-password" required placeholder="再次输入密码" /></label>
+              <button class="button button-primary" type="submit">完成账户设置 <i data-lucide="check"></i></button>
+            </form>
+          </div>
+          <div class="auth-divider"><span>账户支持</span></div>
+          <button class="auth-text-button" id="reset-password" type="button">忘记密码</button>
+          <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
+          <p class="config-notice" id="config-notice" hidden>数据服务尚未配置，暂时无法登录。</p>
+        </div>
+      </section>
+    </main>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="login.js"></script>
+  </body>
+</html>

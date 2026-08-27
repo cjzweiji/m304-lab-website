@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="M304 创新实验室成果档案：竞赛证书、项目立项与实践成果。" />
+    <title>成果档案 | M304 创新实验室</title>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="awards.css" />
+  </head>
+  <body class="award-body">
+    <a class="skip-link" href="#archive-content">跳到成果档案</a>
+
+    <header class="site-header">
+      <div class="site-shell header-inner">
+        <a class="brand" href="index.html" aria-label="M304 创新实验室首页">
+          <img src="assets/m304-logo.jpg" alt="M304 创新实验室标识" />
+          <span><strong>M304</strong><small>创新实验室</small></span>
+        </a>
+        <button class="nav-toggle icon-button" type="button" aria-label="展开导航" title="展开导航"><i data-lucide="menu"></i></button>
+        <nav class="site-nav" aria-label="主导航">
+          <a href="index.html#about">关于 M304</a>
+          <a href="index.html#directions">方向培养</a>
+          <a href="index.html#checkin">学习打卡</a>
+          <a class="is-current" href="awards.html" aria-current="page">成果档案</a>
+          <a href="index.html#join">加入我们</a>
+          <a href="index.html#forum">讨论社区</a>
+        </nav>
+        <a class="header-login" href="login.html">邮箱登录</a>
+      </div>
+    </header>
+
+    <main id="archive-content">
+      <section class="archive-hero">
+        <div class="site-shell archive-hero-layout">
+          <div>
+            <p class="eyebrow">M304 / ACHIEVEMENT ARCHIVE</p>
+            <h1>成果档案</h1>
+            <p>每一张证书都是一次从学习到实践的记录。</p>
+          </div>
+          <div class="archive-stat-grid" aria-label="成果统计">
+            <div><strong>24</strong><span>蓝桥杯证书</span></div>
+            <div><strong>5</strong><span>全国总决赛</span></div>
+            <div><strong>19</strong><span>省赛获奖</span></div>
+            <div><strong>2</strong><span>项目档案</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="archive-controls">
+        <div class="site-shell archive-controls-inner">
+          <div class="filter-group" aria-label="成果类型筛选">
+            <button class="filter-chip is-active" type="button" data-filter="all">全部 <span>26</span></button>
+            <button class="filter-chip" type="button" data-filter="national">全国总决赛 <span>5</span></button>
+            <button class="filter-chip" type="button" data-filter="cpp">省赛 C/C++ <span>9</span></button>
+            <button class="filter-chip" type="button" data-filter="other">省赛其他方向 <span>10</span></button>
+            <button class="filter-chip" type="button" data-filter="project">项目实践 <span>2</span></button>
+          </div>
+          <label class="archive-search">
+            <i data-lucide="search"></i>
+            <input id="archive-search" type="search" placeholder="搜索姓名、方向或奖项" aria-label="搜索成果档案" />
+          </label>
+        </div>
+      </section>
+
+      <section class="archive-grid-section">
+        <div class="site-shell">
+          <div class="archive-result-line"><span id="archive-result-label">全部成果</span><span id="archive-result-count">26 份档案</span></div>
+          <div class="award-grid" id="award-grid" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-shell footer-inner"><p>M304 创新实验室</p><p>开源 · 领航 · 传承 · 汇聚</p><p>信息以实验室后续通知为准</p></div>
+    </footer>
+
+    <dialog class="award-dialog" id="award-dialog" aria-labelledby="award-dialog-title">
+      <div class="award-dialog-inner">
+        <div class="award-dialog-bar">
+          <div><p id="award-dialog-kicker" class="panel-kicker"></p><h2 id="award-dialog-title"></h2></div>
+          <button class="dialog-close icon-button" type="button" aria-label="关闭证书查看" title="关闭"><i data-lucide="x"></i></button>
+        </div>
+        <div class="award-image-stage"><img id="award-dialog-image" alt="" /></div>
+        <div class="award-dialog-footer">
+          <p id="award-dialog-meta"></p>
+          <div class="dialog-navigation">
+            <button class="dialog-prev icon-button" type="button" aria-label="上一份档案" title="上一份"><i data-lucide="arrow-left"></i></button>
+            <span id="award-dialog-position"></span>
+            <button class="dialog-next icon-button" type="button" aria-label="下一份档案" title="下一份"><i data-lucide="arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script src="awards.js"></script>
+  </body>
+</html>
