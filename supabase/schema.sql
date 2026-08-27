@@ -11,12 +11,23 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   email text not null,
   display_name text not null default '新成员' check (char_length(display_name) between 1 and 24),
+  gender text not null default 'prefer_not' check (gender in ('female', 'male', 'non_binary', 'prefer_not')),
+  avatar_url text,
+  profile_completed_at timestamptz,
   role public.member_role not null default 'member',
   invited_by uuid references public.profiles(id) on delete set null,
   invited_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Safe migration for projects that already have the profiles table.
+alter table public.profiles add column if not exists gender text not null default 'prefer_not';
+alter table public.profiles add column if not exists avatar_url text;
+alter table public.profiles add column if not exists profile_completed_at timestamptz;
+alter table public.profiles drop constraint if exists profiles_gender_check;
+alter table public.profiles add constraint profiles_gender_check
+  check (gender in ('female', 'male', 'non_binary', 'prefer_not'));
 
 create unique index if not exists profiles_email_lower_key on public.profiles (lower(email));
 
@@ -119,6 +130,39 @@ begin
 end;
 $$;
 
+create or replace function public.update_my_profile(
+  p_display_name text,
+  p_gender text default 'prefer_not',
+  p_avatar_url text default null
+)
+returns public.profiles language plpgsql security definer set search_path = public as $$
+declare
+  cleaned_name text := btrim(p_display_name);
+  cleaned_gender text := coalesce(nullif(btrim(p_gender), ''), 'prefer_not');
+  updated_profile public.profiles;
+begin
+  if auth.uid() is null then raise exception 'Not authenticated'; end if;
+  if char_length(cleaned_name) not between 1 and 24 then
+    raise exception 'Display name must contain 1 to 24 characters';
+  end if;
+  if cleaned_gender not in ('female', 'male', 'non_binary', 'prefer_not') then
+    raise exception 'Invalid gender';
+  end if;
+  if p_avatar_url is not null and char_length(p_avatar_url) > 1000 then
+    raise exception 'Avatar URL is too long';
+  end if;
+  update public.profiles
+    set display_name = cleaned_name,
+        gender = cleaned_gender,
+        avatar_url = nullif(btrim(p_avatar_url), ''),
+        profile_completed_at = now()
+    where id = auth.uid()
+    returning * into updated_profile;
+  if not found then raise exception 'Profile not found'; end if;
+  return updated_profile;
+end;
+$$;
+
 create or replace function public.complete_my_invitation()
 returns void language plpgsql security definer set search_path = public as $$
 begin
@@ -218,10 +262,32 @@ create policy "admins can view invitation audit" on public.invitation_audit
 for select to authenticated using (public.is_admin());
 
 grant execute on function public.set_my_display_name(text) to authenticated;
+grant execute on function public.update_my_profile(text, text, text) to authenticated;
 grant execute on function public.complete_my_invitation() to authenticated;
 grant execute on function public.start_study_session() to authenticated;
 grant execute on function public.end_study_session(uuid) to authenticated;
 grant select on public.study_leaderboard to authenticated;
+
+-- Public avatars are stored under each member's own folder.
+insert into storage.buckets (id, name, public)
+values ('avatars', 'avatars', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "members can upload own avatar" on storage.objects;
+create policy "members can upload own avatar" on storage.objects
+for insert to authenticated
+with check (bucket_id = 'avatars' and name like (auth.uid()::text || '/%'));
+
+drop policy if exists "members can update own avatar" on storage.objects;
+create policy "members can update own avatar" on storage.objects
+for update to authenticated
+using (bucket_id = 'avatars' and name like (auth.uid()::text || '/%'))
+with check (bucket_id = 'avatars' and name like (auth.uid()::text || '/%'));
+
+drop policy if exists "members can delete own avatar" on storage.objects;
+create policy "members can delete own avatar" on storage.objects
+for delete to authenticated
+using (bucket_id = 'avatars' and name like (auth.uid()::text || '/%'));
 
 -- First administrator bootstrap, performed once after creating a user in Supabase Auth:
 -- insert into public.profiles (id, email, display_name, role)
